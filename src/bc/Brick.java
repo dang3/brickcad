@@ -6,7 +6,7 @@ import mvc.Model;
 public class Brick extends Model {
 	private double length, width, height;
 
-	public Brick(double width, double height, double leng) {
+	public Brick(double leng, double width, double height) {
 		this.width = width;
 		this.height = height;
 		this.length = leng;

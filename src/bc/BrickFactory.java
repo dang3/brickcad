@@ -10,9 +10,9 @@ import mvc.Model;
 import mvc.View;
 
 public class BrickFactory implements AppFactory {
-	private double defaultLength = 50;
+	private double defaultLength = 20;
 	private double defaultWidth = 30;
-	private double defaultHeight = 20;
+	private double defaultHeight = 50;
 	private List<String> views;
 	
 	public BrickFactory() {
@@ -20,7 +20,7 @@ public class BrickFactory implements AppFactory {
 		views.add("Front View");
 		views.add("Side View");
 		views.add("Top View");
-		views.add("Dimensions View");
+		views.add("Dimension View");
 	}
 
 	@Override
@@ -32,9 +32,9 @@ public class BrickFactory implements AppFactory {
 	public View makeView(String viewType) {
 		View v = null;
 		if(viewType.equals("Front View")) v = new FrontView();
-		else if(viewType.contentEquals("Dimensions View")) v = new DimensionsView();
 		else if(viewType.contentEquals("Side View")) v = new SideView();
 		else if(viewType.contentEquals("Top View")) v = new TopView();
+		else if(viewType.contentEquals("Dimension View")) v = new DimensionView();
 		return v;
 	}
 

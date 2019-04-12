@@ -14,7 +14,7 @@ public class ViewFrame extends JInternalFrame {
               true);//iconifiable
         setContentPane(view);
         setLocation(30 * openFrameCount, 30 * openFrameCount);
-        setMinimumSize(new Dimension(50, 50));
-        //pack();
+        setMinimumSize(new Dimension(225, 50));
+       // pack();
 	}
 }

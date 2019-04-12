@@ -129,4 +129,18 @@ public class Utilities {
 			Utilities.error(err.getMessage());
 		}
 	}
+	
+	public static boolean isNumeric(String str) { 
+		try {  
+			Double.parseDouble(str);  
+		    return true;
+		} catch(NumberFormatException e){  
+		    return false;  
+		}  
+	}
+	
+	public static void invalidNumMsg(String input) {
+		Utilities.informUser(input + " is not a valid number. "
+				+ "Please enter a valid number.");
+	}
 }

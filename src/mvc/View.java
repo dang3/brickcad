@@ -1,7 +1,8 @@
 package mvc;
 
-import javax.swing.*;
 import java.util.Observer;
+
+import javax.swing.JPanel;
 
 
 abstract public class View extends JPanel implements Observer {
@@ -13,6 +14,7 @@ abstract public class View extends JPanel implements Observer {
 	public View() {
 		super();
 		packable = false;
+		setOpaque(false);
 	}
 
 	public View(Model model) {

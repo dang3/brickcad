@@ -18,7 +18,7 @@ public class MVCApp extends JFrame implements ActionListener {
 		this.commandProcessor = CommandProcessor.makeCommandProcessor();
 		setDefaultLookAndFeelDecorated(true);
 		desktop = new JDesktopPane(); //a specialized layered pane
-
+		
 		int inset = 50;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(inset, inset,screenSize.width  - inset * 2,screenSize.height - inset * 2);
@@ -31,6 +31,7 @@ public class MVCApp extends JFrame implements ActionListener {
 
 		//create first "window"
 		showView(null);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	protected JMenuBar createMenuBar() {
@@ -61,21 +62,27 @@ public class MVCApp extends JFrame implements ActionListener {
     		Utilities.saveChanges(model);
     		System.exit(1);
     	} else if (cmmd == "Help") {
-    		// informer user of available commands and views
+    		Utilities.informUser("Different parts of the brick can be observed using the View menu. "
+    				+ "Edit the dimensions of the brick in the Edit menu");
     	} else if (cmmd == "About") {
-    		// inform user of application name, version, and company
-    	} else {
+    		Utilities.informUser("BrickCAD 1.0");
+    	} else if (cmmd == "Side View" || cmmd == "Top View" || cmmd == "Front View" || cmmd == "Dimension View") {
+    		new ViewHandler().actionPerformed(e);
+    	}
+    	else {
     		Utilities.error("Unrecognized command: " + cmmd);
     	}
     }
 
 	private void showView(String type) {
-		if (type == null) type = factory.getViews().get(0);
+		if (type == null) type = factory.getViews().get(1);
 		View view = factory.makeView(type);
 		view.setModel(model);
 		ViewFrame vf = new ViewFrame(view);
+
 		vf.setSize(200, 100);
 		vf.setTitle(type);
+
 		/*
 		 * I added a boolean packable field to View with default value false.
 		 * I set it to true for views that contain controls (like text fields)
