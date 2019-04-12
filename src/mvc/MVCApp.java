@@ -37,7 +37,6 @@ public class MVCApp extends JFrame implements ActionListener {
 	   // create a menu bar containing File, Edit, View, and Help menus
 		JMenuBar result = new JMenuBar();
 		result.add(Utilities.makeMenu("File", new String[] {"New", "Open", "Save", "SaveAs", "Quit"}, this));
-		// create Edit, View, and Help menus
 		result.add(Utilities.makeMenu("Edit", new String[] {"Set Length", "Set Width", "Set Height", "Undo", "Redo"}, this));
 		result.add(Utilities.makeMenu("View", new String[] {"Side View", "Top View", "Front View", "Dimension View"}, this));
 		result.add(Utilities.makeMenu("Help", new String[] {"Help", "About"}, this));

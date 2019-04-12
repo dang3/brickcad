@@ -16,7 +16,7 @@ public class FrontView extends View {
 	}
 	
 	public void paintComponent(Graphics g) {
-		
+		g.drawRect(10, 10, 50, 50);
 	}
 
 	@Override
