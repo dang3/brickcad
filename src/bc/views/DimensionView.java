@@ -9,15 +9,22 @@ import java.util.Observable;
 import javax.swing.JTextField;
 
 import bc.Brick;
+import bc.commands.*;
+import mvc.CommandProcessor;
 import mvc.Model;
 import mvc.Utilities;
 import mvc.View;
 
 public class DimensionView extends View {
+	private static final long serialVersionUID = -3710035590081463009L;
 	private final int NUMFIELDS = 3;
 	private JTextField textFields[] = new JTextField[NUMFIELDS];
+	// If user modifies dimensions of the brick, use this to execute the commands
+	private CommandProcessor commandProcessor;	
 	
-	public DimensionView() {}
+	public DimensionView() {
+		commandProcessor = CommandProcessor.makeCommandProcessor();
+	}
 
 	public DimensionView(Model model) {
 		super(model);
@@ -32,33 +39,30 @@ public class DimensionView extends View {
 	
 	public void setModel(Model model) {
 		super.setModel(model);
-		Brick brick = (Brick) model;
 		for(int i = 0; i < NUMFIELDS; i++) {
 			textFields[i] = new JTextField(5);
 			this.add(textFields[i]);
 		}
 		
 		// Set text fields with default values
-		textFields[0].setText(Double.toString(brick.getLength()));
-		textFields[1].setText(Double.toString(brick.getWidth()));
-		textFields[2].setText(Double.toString(brick.getHeight()));
+		setTextFields();
 		
 		// Action listener for changing length field
 		textFields[0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String input = textFields[0].getText();
 				if(Utilities.isNumeric(input))
-					brick.setLength(Double.parseDouble(input));
+					commandProcessor.execute(new SetLength(Double.parseDouble(input), model));
 				else Utilities.invalidNumMsg(input);	
 			}
 		});
 		
-		// Action listener for changing width field.
+		// Action listener for changing width field
 		textFields[1].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String input = textFields[1].getText();
 				if(Utilities.isNumeric(input))
-					brick.setWidth(Double.parseDouble(input));
+					commandProcessor.execute(new SetWidth(Double.parseDouble(input), model));
 				else Utilities.invalidNumMsg(input);	
 			}
 		});
@@ -68,15 +72,29 @@ public class DimensionView extends View {
 			public void actionPerformed(ActionEvent e) {
 				String input = textFields[2].getText();
 				if(Utilities.isNumeric(input))
-					brick.setHeight(Double.parseDouble(input));
+					commandProcessor.execute(new SetHeight(Double.parseDouble(input), model));
 				else Utilities.invalidNumMsg(input);	
 			}
 		});
 	}
+	
+	private void setTextFields() {
+		Brick brick = (Brick) model;
+		textFields[0].setText(Double.toString(brick.getLength()));
+		textFields[1].setText(Double.toString(brick.getWidth()));
+		textFields[2].setText(Double.toString(brick.getHeight()));
+	}
+	
+	private boolean hasNullFields() {
+		for(int i = 0; i < NUMFIELDS; i++) {
+			if(textFields[i] == null) return true;
+		}
+		return false;
+	}
 
 	@Override
 	public void update(Observable subject, Object msg) {
-		// TODO Auto-generated method stub
-		
+		if(hasNullFields()) return;
+		setTextFields();
 	}
 }

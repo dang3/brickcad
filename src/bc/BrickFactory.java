@@ -46,8 +46,8 @@ public class BrickFactory implements AppFactory {
 
 	@Override
 	public String getHelp() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Different parts of the brick can be observed using the View menu. "
+		+ "Edit the dimensions of the brick in the Edit menu";
 	}
 
 

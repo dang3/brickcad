@@ -1,8 +1,21 @@
 package mvc;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
+import javax.swing.SwingUtilities;
+
+import bc.commands.SetHeight;
+import bc.commands.SetLength;
+import bc.commands.SetWidth;
 
 
 public class MVCApp extends JFrame implements ActionListener {
@@ -31,7 +44,6 @@ public class MVCApp extends JFrame implements ActionListener {
 
 		//create first "window"
 		showView(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
 	protected JMenuBar createMenuBar() {
@@ -51,31 +63,49 @@ public class MVCApp extends JFrame implements ActionListener {
     	} else if (cmmd == "SaveAs") {
     		Utilities.save(model, true);
     	} else if (cmmd == "Open") {
-    		Utilities.open(model);
+    		model = Utilities.open(model);
     		for(JInternalFrame frame: desktop.getAllFrames()) {
     			frame.setVisible(false);
     		}
     		showView(null);
     	} else if (cmmd == "New") {
     		// save changes, close all views, create a new model, and open a first view
+    		Utilities.saveChanges(model);
+    		desktop.removeAll();
+    		desktop.repaint();
+    		model = factory.makeModel();
+    		ViewFrame.resetOpenFrameCount();
+    		showView(null);
     	} else if (cmmd == "Quit") {
     		Utilities.saveChanges(model);
     		System.exit(1);
     	} else if (cmmd == "Help") {
-    		Utilities.informUser("Different parts of the brick can be observed using the View menu. "
-    				+ "Edit the dimensions of the brick in the Edit menu");
+    		Utilities.informUser(factory.getHelp());
     	} else if (cmmd == "About") {
-    		Utilities.informUser("BrickCAD 1.0");
+    		Utilities.informUser(factory.about());
     	} else if (cmmd == "Side View" || cmmd == "Top View" || cmmd == "Front View" || cmmd == "Dimension View") {
     		new ViewHandler().actionPerformed(e);
+    	} else if(cmmd == "Set Length") {
+    		String input = Utilities.askUser("Enter a new length");
+    		if(Utilities.isNumeric(input)) commandProcessor.execute(new SetLength(Double.parseDouble(input), model));
+    	} else if(cmmd == "Set Width") {
+    		String input = Utilities.askUser("Enter a new width");
+    		if(Utilities.isNumeric(input)) commandProcessor.execute(new SetWidth(Double.parseDouble(input), model));
+    	} else if(cmmd == "Set Height") {
+    		String input = Utilities.askUser("Enter a new width");
+    		if(Utilities.isNumeric(input)) commandProcessor.execute(new SetHeight(Double.parseDouble(input), model));
+    	} else if(cmmd == "Undo") {
+    		commandProcessor.undo();
+    	} else if(cmmd == "Redo") {
+    		commandProcessor.redo();
     	}
     	else {
     		Utilities.error("Unrecognized command: " + cmmd);
     	}
     }
-
+	
 	private void showView(String type) {
-		if (type == null) type = factory.getViews().get(1);
+		if (type == null) type = factory.getViews().get(0);
 		View view = factory.makeView(type);
 		view.setModel(model);
 		ViewFrame vf = new ViewFrame(view);

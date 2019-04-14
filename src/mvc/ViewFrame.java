@@ -17,4 +17,8 @@ public class ViewFrame extends JInternalFrame {
         setMinimumSize(new Dimension(225, 50));
        // pack();
 	}
+	
+	public static void resetOpenFrameCount() {
+		openFrameCount = 0;
+	}
 }

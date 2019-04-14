@@ -4,6 +4,7 @@ import mvc.Memento;
 import mvc.Model;
 
 public class Brick extends Model {
+	private static final long serialVersionUID = 262396202739789545L;
 	private double length, width, height;
 
 	public Brick(double leng, double width, double height) {
@@ -19,6 +20,7 @@ public class Brick extends Model {
 	public void setLength(double length) {
 		this.length = length;
 		changed();
+		unsavedChanges = true;
 	}
 
 	public double getWidth() {
@@ -28,6 +30,7 @@ public class Brick extends Model {
 	public void setWidth(double width) {
 		this.width = width;
 		changed();
+		unsavedChanges = true;
 	}
 
 	public double getHeight() {
@@ -37,18 +40,25 @@ public class Brick extends Model {
 	public void setHeight(double height) {
 		this.height = height;
 		changed();
+		unsavedChanges = true;
 	}
 
 	@Override
 	public Memento makeMemento() {
-		// TODO Auto-generated method stub
-		return null;
+		return new BrickMemento(length, width, height);
 	}
 
 	@Override
 	public void accept(Memento m) {
-		// TODO Auto-generated method stub
-		
+		BrickMemento b = (BrickMemento) m;
+		length = b.getLength();
+		width = b.getWidth();
+		height = b.getHeight();
+		changed();
+	}
+	
+	public String toString() {
+		return length + " " + width + " " + height;
 	}
 	
 }

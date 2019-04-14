@@ -6,9 +6,8 @@ import javax.swing.JPanel;
 
 
 abstract public class View extends JPanel implements Observer {
-	
+	private static final long serialVersionUID = -7029244421755449199L;
 	protected Model model;
-	
 	private Boolean packable;
 	
 	public View() {

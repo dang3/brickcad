@@ -86,7 +86,9 @@ public class Utilities {
 			Utilities.save(model, false);
 	}
 
-	public static void open(Model model) {
+	// Changed this method to return a Model from file in order to update
+	// the passed in Model
+	public static Model open(Model model) {
 		saveChanges(model);
 		String fName = model.getFileName();
 		JFileChooser chooser = new JFileChooser();
@@ -104,6 +106,7 @@ public class Utilities {
 		} catch (Exception err) {
 			Utilities.error(err.getMessage());
 		}
+		return model;
 	}
 
 	public static void save(Model model, Boolean saveAs) {
@@ -122,7 +125,6 @@ public class Utilities {
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fName));
 			os.writeObject(model);
-			model.setUnsavedChanges(false);
 			os.close();
 			model.setUnsavedChanges(false);
 		} catch (Exception err) {

@@ -1,8 +1,21 @@
 package mvc;
 
 public abstract class Command {
-	private boolean undoable;
+	protected boolean undoable;
 	protected Model model;
-	public abstract void execute();
-	public abstract void undo();
+	protected Memento memento;
+	
+	protected void setModel(Model m) {
+		model = m;
+	}
+	
+	public void execute() {
+		memento = model.makeMemento();
+	}
+	
+	public void undo() {
+		if(undoable) model.accept(memento);
+		else Utilities.informUser("The last command cannot be undone");
+	}
+	
 }
